@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--dubbo配置-->
+    <!-- 当前应用信息配置 -->
+    <dubbo:application name="${dubbo.application.name}" organization="Data" owner="rui.bai"/>
+
+    <!-- 连接注册中心配置 -->
+    <dubbo:registry protocol="zookeeper" address="${dubbo.registry.address}"/>
+
+    <!-- 暴露服务协议配置 -->
+    <dubbo:protocol name="dubbo" port="${dubbo.port}"/>
+
+    <!--<dubbo:monitor protocol="registry"/>-->
+
+    <!-- 暴露服务配置,设置超时时间60s -->
+    <dubbo:service interface="com.alibaba.dubbo.monitor.MonitorService" ref="monitorService" timeout="60000"/>
+
+    <bean id="monitorService" class="com.ants.monitor.biz.dubboService.DubboMonitorService" />
+
+    <!--消费者-->
+    <dubbo:reference id="registryService" interface="com.alibaba.dubbo.registry.RegistryService" />
+
+    <dubbo:reference interface="com.tqmall.tqmallstall.service.sms.AppSmsService"
+                     id="appSmsService" version="${dubbo.stall.consumer.version}" check="false"/>
+
+
+</beans>
