@@ -1,0 +1,22 @@
+
+dubbo-monitor 核心代码块：
+
+1. 数据采集
+com.ants.monitor.biz.dubboService.DubboMonitorService
+collect 方法做原始数据获得，存入blockQueue
+定时器启动做业务处理和数据统计
+
+2. 数据打点
+1) 原始数据打点到redis中 com.ants.monitor.dao.redisManager.InvokeRedisManager#saveInvoke
+2) 原始数据基础上抽点存储
+com.ants.monitor.controller.task.InvokeReportTaskController#appConsumerHourInHour
+com.ants.monitor.controller.task.InvokeReportTaskController#appConsumerOnHourToDay
+
+3. zk节点数据监控
+com.ants.monitor.biz.dubboService.RegistryContainerImpl#start
+
+
+4. zk节点补偿机制
+com.ants.monitor.biz.dubboService.RegistryContainerImpl#initRedisChangeAppCaChe
+
+5. 其余的就是 正常的业务代码和前端代码
